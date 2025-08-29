@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>유니버설디자인 챌린지!</title>
+    <title>장벽없는마을만들기 - 유니버설 디자인 챌린지!</title>
     <style>
         /* 기본 스타일 */
         @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
-       
+        
         body {
             font-family: 'Noto Sans KR', sans-serif;
             background-color: #f0f2f5;
@@ -19,7 +19,6 @@
             color: #333;
         }
 
-        /* 게임 컨테이너 스타일 (스마트폰 화면처럼) */
         #game-container {
             width: 100%;
             max-width: 400px;
@@ -35,11 +34,11 @@
             overflow: hidden;
         }
 
-        /* 헤더 (제목, 점수) */
         #header {
             text-align: center;
             padding-bottom: 15px;
             border-bottom: 1px solid #eee;
+            flex-shrink: 0;
         }
         #header h1 {
             font-size: 1.5em;
@@ -52,21 +51,41 @@
             color: #5f6368;
         }
 
-        /* 퀴즈 영역 */
-        #quiz-area {
+        /* 콘텐츠 영역 공통 */
+        .content-area {
             flex-grow: 1;
-            padding: 20px 0;
+            padding-top: 20px;
             overflow-y: auto;
         }
+        
+        /* 시작 페이지 스타일 */
+        #start-page {
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        #start-page h2 {
+            font-size: 1.5em;
+            color: #1a73e8;
+            margin-bottom: 20px;
+        }
+        #start-page p {
+            font-size: 1.0em;
+            line-height: 1.6;
+            margin-bottom: 30px;
+            text-align: left;
+            max-width: 300px;
+        }
 
+        /* 퀴즈 영역 */
         #question-title {
             font-size: 1.2em;
             font-weight: bold;
             margin-bottom: 20px;
             text-align: center;
         }
-
-        /* 선택지 (이미지) */
         #options-container {
             display: flex;
             justify-content: space-around;
@@ -92,22 +111,19 @@
         .option:hover {
             transform: scale(1.05);
         }
-
-        /* 정답/오답 시각적 피드백 */
         .option.correct {
-            border-color: #34a853; /* 초록색 */
+            border-color: #34a853;
             background-color: #e6f4ea;
         }
         .option.incorrect {
-            border-color: #ea4335; /* 빨간색 */
+            border-color: #ea4335;
             background-color: #fce8e6;
         }
         .option.disabled {
-            pointer-events: none; /* 클릭 방지 */
+            pointer-events: none;
             opacity: 0.7;
         }
 
-        /* 정답 및 해설 */
         #result-container {
             margin-top: 20px;
             padding: 15px;
@@ -124,7 +140,6 @@
             line-height: 1.6;
         }
 
-        /* 버튼 */
         .controls {
             padding-top: 15px;
             text-align: center;
@@ -146,8 +161,7 @@
             background-color: #185abc;
         }
         
-        /* 정보 입력 폼 */
-        #form-container {
+        #form-container, #thank-you-container {
             text-align: center;
         }
         #form-container h2 {
@@ -163,18 +177,11 @@
             box-sizing: border-box;
             font-size: 1em;
         }
-
-        /* 감사 메시지 */
         #thank-you-container p {
             text-align: center;
             font-size: 1.5em;
             font-weight: bold;
             margin: 40px 0;
-        }
-
-        /* 초기에 숨길 요소 */
-        .hidden {
-            display: none;
         }
     </style>
 </head>
@@ -182,11 +189,20 @@
 
     <div id="game-container">
         <div id="header">
-            <h1>🧐 유니버설디자인 챌랜지!</h1>
+            <h1>🧐 유니버설 디자인 챌린지!</h1>
             <p id="score">점수: 0</p>
         </div>
        
-        <div id="quiz-area">
+        <div id="start-page" class="content-area">
+            <h2>✨ 유니버설 디자인이란?</h2>
+            <p>
+                연령, 성별, 국적, 장애 유무와 상관없이 <b>모든 사람이 차별 없이 편안하고, 안전하게 이용할 수 있도록</b> 제품, 시설, 환경 등을 설계하는 것을 말합니다.<br><br>
+                일상생활 속 작은 변화가 모두에게 더 나은 환경을 만듭니다. <br><br>퀴즈를 통해 유니버설 디자인의 중요성을 알아볼까요?
+            </p>
+            <button id="start-quiz-btn" class="btn">챌린지 시작하기</button>
+        </div>
+
+        <div id="quiz-area" class="content-area" style="display: none;">
             <h2 id="question-title"></h2>
             <div id="options-container">
                 <div class="option" id="option-a" onclick="selectAnswer(0)">
@@ -198,16 +214,16 @@
                     <p id="text-b"></p>
                 </div>
             </div>
-            <div id="result-container" class="hidden">
+            <div id="result-container" style="display: none;">
                 <h3 id="result-title"></h3>
                 <p id="result-explanation"></p>
             </div>
             <div class="controls">
-                <button id="next-btn" class="btn hidden">다음 문제</button>
+                <button id="next-btn" class="btn" style="display: none;">다음 문제</button>
             </div>
         </div>
 
-        <div id="form-container" class="hidden">
+        <div id="form-container" class="content-area" style="display: none;">
             <h2>캠페인 참여</h2>
             <p>정보를 입력하고 캠페인에 응모하세요!</p>
             <input type="text" id="user-name" class="form-input" placeholder="이름을 입력하세요" required>
@@ -215,7 +231,7 @@
             <button id="submit-btn" class="btn">캠페인 응모하기</button>
         </div>
         
-        <div id="thank-you-container" class="hidden">
+        <div id="thank-you-container" class="content-area" style="display: none;">
             <p>🎉 참여해주셔서 감사합니다!</p>
             <button id="restart-btn" class="btn">다시 참여하기</button>
         </div>
@@ -278,16 +294,19 @@
         ];
 
         // --- 구글 시트 연동 URL ---
-        // 🚨 아래 URL을 2단계에서 생성한 본인의 URL로 교체하세요!
-        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyURu_L21vxxdDMJCHH3xSk-nXyMXKEkZRFhcBiOkepsQgMlR2XWo0PqQVWtZNHIgvJLQ/exec';
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyURu_L21vxxdDMJCHH3xSk-nXyMXKEkZRFhcBiOkepsQgMlR2XWo0PqQVWtZNHIgvJLQ/exec'; // 🚨 본인의 URL로 교체하세요!
 
         // --- 게임 상태 변수 ---
         let currentQuestionIndex = 0;
         let score = 0;
-        let userAnswers = []; // 사용자 응답 저장 배열
+        let userAnswers = [];
 
         // --- HTML 요소 가져오기 ---
+        const headerEl = document.getElementById('header');
         const scoreEl = document.getElementById('score');
+        const startPageEl = document.getElementById('start-page');
+        const startQuizBtn = document.getElementById('start-quiz-btn');
+        const quizAreaEl = document.getElementById('quiz-area');
         const questionTitleEl = document.getElementById('question-title');
         const optionAEl = document.getElementById('option-a');
         const optionBEl = document.getElementById('option-b');
@@ -299,7 +318,6 @@
         const resultTitleEl = document.getElementById('result-title');
         const resultExplanationEl = document.getElementById('result-explanation');
         const nextBtn = document.getElementById('next-btn');
-        const quizAreaEl = document.getElementById('quiz-area');
         const formContainerEl = document.getElementById('form-container');
         const thankYouContainerEl = document.getElementById('thank-you-container');
         const submitBtn = document.getElementById('submit-btn');
@@ -307,17 +325,26 @@
         
         // --- 함수 정의 ---
         
-        // 퀴즈 불러오기
+        function startQuiz() {
+            startPageEl.style.display = 'none';
+            quizAreaEl.style.display = 'block';
+            
+            headerEl.querySelector('h1').innerText = '🧐 유니버설 디자인 챌린지!';
+            scoreEl.style.display = 'block';
+            scoreEl.innerText = '점수: 0';
+            currentQuestionIndex = 0;
+            score = 0;
+            userAnswers = [];
+            loadQuiz();
+        }
+
         function loadQuiz() {
             resetState();
-           
             if (currentQuestionIndex >= quizData.length) {
                 showEntryForm();
                 return;
             }
-
             const currentQuiz = quizData[currentQuestionIndex];
-           
             questionTitleEl.innerText = currentQuiz.question;
             imgAEl.src = currentQuiz.options[0].image;
             textAEl.innerHTML = currentQuiz.options[0].text;
@@ -325,27 +352,21 @@
             textBEl.innerHTML = currentQuiz.options[1].text;
         }
 
-        // 상태 초기화
         function resetState() {
-            resultContainerEl.classList.add('hidden');
-            nextBtn.classList.add('hidden');
+            resultContainerEl.style.display = 'none';
+            nextBtn.style.display = 'none';
             optionAEl.classList.remove('correct', 'incorrect', 'disabled');
             optionBEl.classList.remove('correct', 'incorrect', 'disabled');
         }
 
-        // 정답 선택
         function selectAnswer(selectedIndex) {
             const currentQuiz = quizData[currentQuestionIndex];
-            const selectedOption = currentQuiz.options[selectedIndex];
             
-            // 사용자 응답 저장 (A/B 형식으로 저장)
             userAnswers.push(selectedIndex === 0 ? 'A' : 'B');
-
-            // 모든 옵션 클릭 비활성화
             optionAEl.classList.add('disabled');
             optionBEl.classList.add('disabled');
 
-            if (selectedOption.isCorrect) {
+            if (currentQuiz.options[selectedIndex].isCorrect) {
                 score++;
                 scoreEl.innerText = `점수: ${score}`;
                 document.getElementById(selectedIndex === 0 ? 'option-a' : 'option-b').classList.add('correct');
@@ -359,27 +380,24 @@
                 resultTitleEl.style.color = '#ea4335';
             }
 
-            // 정답 및 해설 표시
             resultExplanationEl.innerHTML = `<b>정답: ${currentQuiz.answer}</b><br><br>${currentQuiz.explanation}`;
-            resultContainerEl.classList.remove('hidden');
+            resultContainerEl.style.display = 'block';
            
-            // 다음 버튼 텍스트 변경
             if (currentQuestionIndex === quizData.length - 1) {
                 nextBtn.innerText = '결과 보기';
             } else {
                 nextBtn.innerText = '다음 문제';
             }
-            nextBtn.classList.remove('hidden');
+            nextBtn.style.display = 'block';
         }
        
-        // 응모 폼 표시
         function showEntryForm() {
-            quizAreaEl.classList.add('hidden'); // 퀴즈 영역 숨기기
-            header.innerHTML = `<h1>퀴즈 완료!</h1><p>총 ${quizData.length}문제 중 ${score}문제를 맞혔습니다!</p>`;
-            formContainerEl.classList.remove('hidden'); // 폼 영역 보이기
+            quizAreaEl.style.display = 'none';
+            formContainerEl.style.display = 'block';
+            headerEl.querySelector('h1').innerText = '챌린지 완료!';
+            scoreEl.innerText = `총 ${quizData.length}문제 중 ${score}문제를 맞혔습니다!`;
         }
 
-        // 데이터 제출
         async function submitData() {
             const name = document.getElementById('user-name').value;
             const phone = document.getElementById('user-phone').value;
@@ -388,8 +406,6 @@
                 alert('이름과 연락처를 모두 입력해주세요.');
                 return;
             }
-
-            // 버튼 비활성화 (중복 제출 방지)
             submitBtn.disabled = true;
             submitBtn.innerText = '제출 중...';
 
@@ -397,50 +413,48 @@
                 name: name,
                 phone: phone,
                 score: score,
-                answer1: userAnswers[0],
-                answer2: userAnswers[1],
-                answer3: userAnswers[2]
+                answer1: userAnswers[0] || 'N/A',
+                answer2: userAnswers[1] || 'N/A',
+                answer3: userAnswers[2] || 'N/A'
             };
             
             try {
-                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
-                    mode: 'no-cors', // no-cors 모드로 설정
+                    mode: 'no-cors',
                     cache: 'no-cache',
-                    headers: {
-                        'Content-Type': 'application/json',
-                    },
+                    headers: {'Content-Type': 'application/json'},
                     body: JSON.stringify(data),
                     redirect: 'follow'
                 });
-                
-                // 성공적으로 제출 후 화면 전환
-                formContainerEl.classList.add('hidden');
-                thankYouContainerEl.classList.remove('hidden');
-
+                formContainerEl.style.display = 'none';
+                thankYouContainerEl.style.display = 'block';
+                headerEl.querySelector('h1').innerText = '캠페인 참여 완료';
+                scoreEl.style.display = 'none';
             } catch (error) {
                 console.error('Error:', error);
                 alert('제출 중 오류가 발생했습니다. 다시 시도해주세요.');
-                // 오류 발생 시 버튼 다시 활성화
                 submitBtn.disabled = false;
                 submitBtn.innerText = '캠페인 응모하기';
             }
         }
 
+        function restartGame() {
+            thankYouContainerEl.style.display = 'none';
+            startPageEl.style.display = 'flex'; // 시작 페이지는 flex로 정렬되므로 'flex'로 변경
+            scoreEl.style.display = 'block';
+            headerEl.querySelector('h1').innerText = '🧐 유니버설 디자인 챌린지!';
+            scoreEl.innerText = '점수: 0';
+        }
+
         // --- 이벤트 리스너 ---
+        startQuizBtn.addEventListener('click', startQuiz);
         nextBtn.addEventListener('click', () => {
             currentQuestionIndex++;
             loadQuiz();
         });
-
         submitBtn.addEventListener('click', submitData);
-
-        restartBtn.addEventListener('click', () => {
-            location.reload();
-        });
-
-        // --- 게임 시작 ---
-        loadQuiz();
+        restartBtn.addEventListener('click', restartGame);
 
     </script>
 </body>
