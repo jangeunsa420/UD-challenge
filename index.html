@@ -1,0 +1,447 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>유니버설디자인 챌린지!</title>
+    <style>
+        /* 기본 스타일 */
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;700&display=swap');
+       
+        body {
+            font-family: 'Noto Sans KR', sans-serif;
+            background-color: #f0f2f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            color: #333;
+        }
+
+        /* 게임 컨테이너 스타일 (스마트폰 화면처럼) */
+        #game-container {
+            width: 100%;
+            max-width: 400px;
+            height: 100%;
+            max-height: 800px;
+            background-color: white;
+            border-radius: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            padding: 20px;
+            box-sizing: border-box;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        /* 헤더 (제목, 점수) */
+        #header {
+            text-align: center;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        #header h1 {
+            font-size: 1.5em;
+            margin: 0;
+            color: #1a73e8;
+        }
+        #score {
+            font-size: 1em;
+            font-weight: bold;
+            color: #5f6368;
+        }
+
+        /* 퀴즈 영역 */
+        #quiz-area {
+            flex-grow: 1;
+            padding: 20px 0;
+            overflow-y: auto;
+        }
+
+        #question-title {
+            font-size: 1.2em;
+            font-weight: bold;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        /* 선택지 (이미지) */
+        #options-container {
+            display: flex;
+            justify-content: space-around;
+            gap: 15px;
+        }
+        .option {
+            width: 45%;
+            cursor: pointer;
+            border: 3px solid transparent;
+            border-radius: 10px;
+            transition: all 0.2s ease-in-out;
+            text-align: center;
+        }
+        .option img {
+            width: 100%;
+            border-radius: 8px;
+            display: block;
+        }
+        .option p {
+            margin: 8px 0 0 0;
+            font-weight: bold;
+        }
+        .option:hover {
+            transform: scale(1.05);
+        }
+
+        /* 정답/오답 시각적 피드백 */
+        .option.correct {
+            border-color: #34a853; /* 초록색 */
+            background-color: #e6f4ea;
+        }
+        .option.incorrect {
+            border-color: #ea4335; /* 빨간색 */
+            background-color: #fce8e6;
+        }
+        .option.disabled {
+            pointer-events: none; /* 클릭 방지 */
+            opacity: 0.7;
+        }
+
+        /* 정답 및 해설 */
+        #result-container {
+            margin-top: 20px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 8px;
+        }
+        #result-title {
+            font-weight: bold;
+            font-size: 1.1em;
+            color: #1a73e8;
+        }
+        #result-explanation {
+            margin-top: 10px;
+            line-height: 1.6;
+        }
+
+        /* 버튼 */
+        .controls {
+            padding-top: 15px;
+            text-align: center;
+        }
+        .btn {
+            background-color: #1a73e8;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            width: 100%;
+            box-sizing: border-box;
+        }
+        .btn:hover {
+            background-color: #185abc;
+        }
+        
+        /* 정보 입력 폼 */
+        #form-container {
+            text-align: center;
+        }
+        #form-container h2 {
+            font-size: 1.3em;
+            color: #333;
+        }
+        .form-input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 1em;
+        }
+
+        /* 감사 메시지 */
+        #thank-you-container p {
+            text-align: center;
+            font-size: 1.5em;
+            font-weight: bold;
+            margin: 40px 0;
+        }
+
+        /* 초기에 숨길 요소 */
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <div id="game-container">
+        <div id="header">
+            <h1>🧐 유니버설디자인 챌랜지!</h1>
+            <p id="score">점수: 0</p>
+        </div>
+       
+        <div id="quiz-area">
+            <h2 id="question-title"></h2>
+            <div id="options-container">
+                <div class="option" id="option-a" onclick="selectAnswer(0)">
+                    <img id="img-a" src="" alt="선택지 A">
+                    <p id="text-a"></p>
+                </div>
+                <div class="option" id="option-b" onclick="selectAnswer(1)">
+                    <img id="img-b" src="" alt="선택지 B">
+                    <p id="text-b"></p>
+                </div>
+            </div>
+            <div id="result-container" class="hidden">
+                <h3 id="result-title"></h3>
+                <p id="result-explanation"></p>
+            </div>
+            <div class="controls">
+                <button id="next-btn" class="btn hidden">다음 문제</button>
+            </div>
+        </div>
+
+        <div id="form-container" class="hidden">
+            <h2>캠페인 참여</h2>
+            <p>정보를 입력하고 캠페인에 응모하세요!</p>
+            <input type="text" id="user-name" class="form-input" placeholder="이름을 입력하세요" required>
+            <input type="tel" id="user-phone" class="form-input" placeholder="연락처를 입력하세요" required>
+            <button id="submit-btn" class="btn">캠페인 응모하기</button>
+        </div>
+        
+        <div id="thank-you-container" class="hidden">
+            <p>🎉 참여해주셔서 감사합니다!</p>
+            <button id="restart-btn" class="btn">다시 참여하기</button>
+        </div>
+    </div>
+
+    <script>
+        // --- 게임 데이터 ---
+        const quizData = [
+             {
+                question: "문제 1번: 어떤 버스를 이용하시겠어요?",
+                options: [
+                    {
+                        text: "(A)<br>계단이 있는<br>고층 버스",
+                        image: "https://lh3.googleusercontent.com/pw/AP1GczO9QJ0tD4xYuEl-lNf0ZXGwutMficQni-cMZtt07Dz6uPByE9KFzcVX9BjtY55rHVhk1Ockz55Xdb_V0_uvVVOjBFdKFyJ2vdo-PpbQgS_HeZ-By_5eCqvoEs9Z6gxScaMM7PGK2oqRk8qwTR2Zwefb=w400-h400-s-no-gm?authuser=0",
+                        isCorrect: false
+                    },
+                    {
+                        text: "(B)<br>경사로가 있는<br>저상버스",
+                        image: "https://lh3.googleusercontent.com/pw/AP1GczP9GypQWiv74S5n1R4cWfKfF8uDG7VUddrIKjecbirY1PLzN0laHB-ScbjvU5VFMFLkHLvs6NZQLRdz0y2rRMCn6JTekW73PTl7Y3NQ6b8xnKHtDta7XY6MF3fxCIEJ-827OPpY8n1mzfq0cOjNNUqF=w400-h400-s-no-gm?authuser=0",
+                        isCorrect: true
+                    }
+                ],
+                answer: "(B) 경사로가 있는 저상버스",
+                explanation: "(A) 고층 버스는 출입문에 높은 계단이 있어 노약자, 어린이, 임산부, 휠체어 이용자 등 이동에 어려움을 겪는 사람들이 이용하기 어렵습니다. 반면,<b> (B) 저상 버스는 바닥이 낮고 출입구에 계단이 없으며, 필요시 경사판을 내려 휠체어나 유모차가 쉽게 오르내릴 수 있습니다.</b> 이는 신체적 조건에 상관없이 누구나 버스를 편리하게 이용할 수 있는 유니버설 디자인의 좋은 예시입니다."
+            },
+            {
+                question: "문제 2번: 어떤 길이 안전할까요?",
+                options: [
+                    {
+                        text: "(A)<br>점자블록 양 옆에<br>공간이 충분한 길",
+                        image: "https://lh3.googleusercontent.com/pw/AP1GczOLEl-KhOWNBwnOgMprK1wfmjgV_8VJwZo65ej4uS7ROrp43JfX7eL8Bsy6MBxd55b4sNLnFQtEbftsROLxNbjO1ck7N7O7xou2qB7k0VrE1cvR-ZOh7O5BgBDsnOdPJvt91DWMmsTB5jNsuyUd55km=w400-h402-s-no-gm?authuser=0",
+                        isCorrect: true
+                    },
+                    {
+                        text: "(B)<br>점자블록 위에<br>짐이 있는 길",
+                        image: "https://lh3.googleusercontent.com/pw/AP1GczPSeQvFVveFmaKhUn0kTdhU-ybgsmoM8ZccoZGpOZ3809iF39aHQ7a8gx1KFth3IVZEddue8hOOk263qPlEbKdWD2hrEbFVCc1iiUCbnZnbjT_D6EQMZsht8ShrTk74azscl7B1Iv_NdebRXeW4KApP=w400-h401-s-no-gm?authuser=0",
+                        isCorrect: false
+                    }
+                ],
+                answer: "(A) 점자블록 양 옆에 공간이 충분한 길",
+                explanation: "시각장애인용 점자블록은 시각장애인이 안전하게 보행할 수 있도록 길을 안내하는 중요한 시설물입니다. <b>(B) 사진처럼 점자블록 위에 물건을 쌓아두거나 다른 시설물을 설치하는 것은 시각장애인의 안전을 심각하게 위협하는 행위입니다. </b>(A) 사진처럼 점자블록을 포함한 보행로에 장애물이 없고 충분한 공간이 확보되어야 시각장애인은 물론 모든 사람이 안전하고 쾌적하게 보행할 수 있습니다. 이는 모두의 안전과 접근성을 보장하는 유니버설 디자인의 기본 원칙을 충족합니다."
+            },
+            {
+                question: "문제 3번: 어떤 카페에 가시겠어요?",
+                options: [
+                    {
+                        text: "(A)<br>턱이 있는 카페",
+                        image: "https://lh3.googleusercontent.com/pw/AP1GczNqzcLCT4zliv7iPMDEZ7n5d1GvQzI_29zHPLVxmTymSNiwzYmwx5TCV5iwkCLxokSmYzh2IEFtuoU3XZKTDXvybdO1SIPygjt3HPTINpWMdi8m7Ya4sMgUl5EOGI3XvJh9u1kQbOYlZwpjzUCl_EbY=w401-h401-s-no-gm?authuser=0",
+                        isCorrect: false
+                    },
+                    {
+                        text: "(B)<br>경사로가 설치된 카페",
+                        image: "https://lh3.googleusercontent.com/pw/AP1GczPoInpNHX-eLZ4cLYoLM2V9CL3w3_fbSRHWMS4rTgC03cnjTcKRW7-rGx95k8OAK1GGF1ule45v-QYr7Wgnltqxiy7inNl55cIO92-Bpew1gBiZv63fEPck3Nmv060e9KQik-Rdz_qX_oceTwciVuVr=w400-h400-s-no-gm?authuser=0",
+                        isCorrect: true
+                    }
+                ],
+                answer: "(B) 경사로가 설치된 카페",
+                explanation: "사진처럼 카페 입구에 턱이 있으면 휠체어, 유아차 같이 바퀴달린 이동수단를 이용하는 사람들이 큰 불편을 겪습니다. 발을 헛디디기 쉬운 어린이, 어르신에게도 위험할 수 있습니다. <b> (B) 사진처럼 경사로를 설치하거나 입구의 턱을 완전히 낮추면 휠체어 사용자뿐만 아니라 모든 보행자가 안전하고 편리하게 카페를 이용할 수 있습니다.</b> 이는 물리적 장벽을 제거하여 모두의 원활한 이동을 돕는 유니버설 디자인이 잘 적용된 모습입니다."
+            }
+        ];
+
+        // --- 구글 시트 연동 URL ---
+        // 🚨 아래 URL을 2단계에서 생성한 본인의 URL로 교체하세요!
+        const GOOGLE_SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbyURu_L21vxxdDMJCHH3xSk-nXyMXKEkZRFhcBiOkepsQgMlR2XWo0PqQVWtZNHIgvJLQ/exec';
+
+        // --- 게임 상태 변수 ---
+        let currentQuestionIndex = 0;
+        let score = 0;
+        let userAnswers = []; // 사용자 응답 저장 배열
+
+        // --- HTML 요소 가져오기 ---
+        const scoreEl = document.getElementById('score');
+        const questionTitleEl = document.getElementById('question-title');
+        const optionAEl = document.getElementById('option-a');
+        const optionBEl = document.getElementById('option-b');
+        const imgAEl = document.getElementById('img-a');
+        const imgBEl = document.getElementById('img-b');
+        const textAEl = document.getElementById('text-a');
+        const textBEl = document.getElementById('text-b');
+        const resultContainerEl = document.getElementById('result-container');
+        const resultTitleEl = document.getElementById('result-title');
+        const resultExplanationEl = document.getElementById('result-explanation');
+        const nextBtn = document.getElementById('next-btn');
+        const quizAreaEl = document.getElementById('quiz-area');
+        const formContainerEl = document.getElementById('form-container');
+        const thankYouContainerEl = document.getElementById('thank-you-container');
+        const submitBtn = document.getElementById('submit-btn');
+        const restartBtn = document.getElementById('restart-btn');
+        
+        // --- 함수 정의 ---
+        
+        // 퀴즈 불러오기
+        function loadQuiz() {
+            resetState();
+           
+            if (currentQuestionIndex >= quizData.length) {
+                showEntryForm();
+                return;
+            }
+
+            const currentQuiz = quizData[currentQuestionIndex];
+           
+            questionTitleEl.innerText = currentQuiz.question;
+            imgAEl.src = currentQuiz.options[0].image;
+            textAEl.innerHTML = currentQuiz.options[0].text;
+            imgBEl.src = currentQuiz.options[1].image;
+            textBEl.innerHTML = currentQuiz.options[1].text;
+        }
+
+        // 상태 초기화
+        function resetState() {
+            resultContainerEl.classList.add('hidden');
+            nextBtn.classList.add('hidden');
+            optionAEl.classList.remove('correct', 'incorrect', 'disabled');
+            optionBEl.classList.remove('correct', 'incorrect', 'disabled');
+        }
+
+        // 정답 선택
+        function selectAnswer(selectedIndex) {
+            const currentQuiz = quizData[currentQuestionIndex];
+            const selectedOption = currentQuiz.options[selectedIndex];
+            
+            // 사용자 응답 저장 (A/B 형식으로 저장)
+            userAnswers.push(selectedIndex === 0 ? 'A' : 'B');
+
+            // 모든 옵션 클릭 비활성화
+            optionAEl.classList.add('disabled');
+            optionBEl.classList.add('disabled');
+
+            if (selectedOption.isCorrect) {
+                score++;
+                scoreEl.innerText = `점수: ${score}`;
+                document.getElementById(selectedIndex === 0 ? 'option-a' : 'option-b').classList.add('correct');
+                resultTitleEl.innerText = '정답입니다! ✅';
+                resultTitleEl.style.color = '#34a853';
+            } else {
+                document.getElementById(selectedIndex === 0 ? 'option-a' : 'option-b').classList.add('incorrect');
+                const correctIndex = currentQuiz.options.findIndex(opt => opt.isCorrect);
+                document.getElementById(correctIndex === 0 ? 'option-a' : 'option-b').classList.add('correct');
+                resultTitleEl.innerText = '아쉬워요! ❌';
+                resultTitleEl.style.color = '#ea4335';
+            }
+
+            // 정답 및 해설 표시
+            resultExplanationEl.innerHTML = `<b>정답: ${currentQuiz.answer}</b><br><br>${currentQuiz.explanation}`;
+            resultContainerEl.classList.remove('hidden');
+           
+            // 다음 버튼 텍스트 변경
+            if (currentQuestionIndex === quizData.length - 1) {
+                nextBtn.innerText = '결과 보기';
+            } else {
+                nextBtn.innerText = '다음 문제';
+            }
+            nextBtn.classList.remove('hidden');
+        }
+       
+        // 응모 폼 표시
+        function showEntryForm() {
+            quizAreaEl.classList.add('hidden'); // 퀴즈 영역 숨기기
+            header.innerHTML = `<h1>퀴즈 완료!</h1><p>총 ${quizData.length}문제 중 ${score}문제를 맞혔습니다!</p>`;
+            formContainerEl.classList.remove('hidden'); // 폼 영역 보이기
+        }
+
+        // 데이터 제출
+        async function submitData() {
+            const name = document.getElementById('user-name').value;
+            const phone = document.getElementById('user-phone').value;
+
+            if (!name || !phone) {
+                alert('이름과 연락처를 모두 입력해주세요.');
+                return;
+            }
+
+            // 버튼 비활성화 (중복 제출 방지)
+            submitBtn.disabled = true;
+            submitBtn.innerText = '제출 중...';
+
+            const data = {
+                name: name,
+                phone: phone,
+                score: score,
+                answer1: userAnswers[0],
+                answer2: userAnswers[1],
+                answer3: userAnswers[2]
+            };
+            
+            try {
+                const response = await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors', // no-cors 모드로 설정
+                    cache: 'no-cache',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(data),
+                    redirect: 'follow'
+                });
+                
+                // 성공적으로 제출 후 화면 전환
+                formContainerEl.classList.add('hidden');
+                thankYouContainerEl.classList.remove('hidden');
+
+            } catch (error) {
+                console.error('Error:', error);
+                alert('제출 중 오류가 발생했습니다. 다시 시도해주세요.');
+                // 오류 발생 시 버튼 다시 활성화
+                submitBtn.disabled = false;
+                submitBtn.innerText = '캠페인 응모하기';
+            }
+        }
+
+        // --- 이벤트 리스너 ---
+        nextBtn.addEventListener('click', () => {
+            currentQuestionIndex++;
+            loadQuiz();
+        });
+
+        submitBtn.addEventListener('click', submitData);
+
+        restartBtn.addEventListener('click', () => {
+            location.reload();
+        });
+
+        // --- 게임 시작 ---
+        loadQuiz();
+
+    </script>
+</body>
+</html>
