@@ -23,7 +23,7 @@
             width: 100%;
             max-width: 400px;
             height: 100%;
-            max-height: 800px;
+            max-height: 700px;
             background-color: white;
             border-radius: 20px;
             box-shadow: 0 4px 20px rgba(0,0,0,0.1);
@@ -179,7 +179,7 @@
         }
         #thank-you-container p {
             text-align: center;
-            font-size: 1.5em;
+            font-size: 1em;
             font-weight: bold;
             margin: 40px 0;
         }
@@ -189,17 +189,18 @@
 
     <div id="game-container">
         <div id="header">
-            <h1>🧐 유니버설 디자인 챌린지!</h1>
-            <p id="score">점수: 0</p>
+             <h1></h1>
+            <p id="score"></p>            
         </div>
        
         <div id="start-page" class="content-area">
             <h2>✨ 유니버설 디자인이란?</h2>
-            <p>
-                연령, 성별, 국적, 장애 유무와 상관없이 <b>모든 사람이 차별 없이 편안하고, 안전하게 이용할 수 있도록</b> 제품, 시설, 환경 등을 설계하는 것을 말합니다.<br><br>
-                일상생활 속 작은 변화가 모두에게 더 나은 환경을 만듭니다. <br><br>퀴즈를 통해 유니버설 디자인의 중요성을 알아볼까요?
+            <p style="text-align: center;">
+                연령, 성별, 국적, 장애 유무와 상관없이 <br><b>모든 사람이 차별 없이<br> 편안하고, 안전하게 이용할 수 있도록</b> <br>물건, 환경을 만드는 노력을 말합니다.<br><br>장벽없는마을만들기는 <br>유니버설디자인 은평을 만들고 있어요.<br><br>
+                일상 속 곳곳에 숨어 있는 유니버설 디자인, 여러분은 과연 눈치챌 수 있을까요?<br><br>
+세 가지 퀴즈를 준비했습니다! 👀 <br>지금부터 두 사진 중 어느쪽이 <br>유니버설 디자인일지 맞춰보세요!
             </p>
-            <button id="start-quiz-btn" class="btn">챌린지 시작하기</button>
+            <button id="start-quiz-btn" class="btn"> 유니버설디자인 챌린지 시작하기</button>
         </div>
 
         <div id="quiz-area" class="content-area" style="display: none;">
@@ -224,16 +225,18 @@
         </div>
 
         <div id="form-container" class="content-area" style="display: none;">
-            <h2>캠페인 참여</h2>
-            <p>정보를 입력하고 캠페인에 응모하세요!</p>
+            <h2>캠페인 선물받기🎀</h2>
+            <p>참여해 주신 분들 중 30명을 뽑아서<br>편의점 상품권을 드립니다!</p>
             <input type="text" id="user-name" class="form-input" placeholder="이름을 입력하세요" required>
             <input type="tel" id="user-phone" class="form-input" placeholder="연락처를 입력하세요" required>
             <button id="submit-btn" class="btn">캠페인 응모하기</button>
         </div>
         
         <div id="thank-you-container" class="content-area" style="display: none;">
-            <p>🎉 참여해주셔서 감사합니다!</p>
+            <h2>🎉 참여해주셔서 감사합니다!</h2><p>앞으로도<br>유니버설디자인과 장벽없는마을만들기에<br>많은 관심 부탁드립니다!</p>
             <button id="restart-btn" class="btn">다시 참여하기</button>
+            <button id="visit-blog-btn" class="btn" style="margin-top: 10px;">장벽없는마을만들기 블로그 방문하기</button> 
+        </div>
         </div>
     </div>
 
@@ -244,7 +247,7 @@
                 question: "문제 1번: 어떤 버스를 이용하시겠어요?",
                 options: [
                     {
-                        text: "(A)<br>계단이 있는<br>고층 버스",
+                        text: "(A)<br>계단이 있는<br>높은 버스",
                         image: "https://lh3.googleusercontent.com/pw/AP1GczO9QJ0tD4xYuEl-lNf0ZXGwutMficQni-cMZtt07Dz6uPByE9KFzcVX9BjtY55rHVhk1Ockz55Xdb_V0_uvVVOjBFdKFyJ2vdo-PpbQgS_HeZ-By_5eCqvoEs9Z6gxScaMM7PGK2oqRk8qwTR2Zwefb=w400-h400-s-no-gm?authuser=0",
                         isCorrect: false
                     },
@@ -255,7 +258,7 @@
                     }
                 ],
                 answer: "(B) 경사로가 있는 저상버스",
-                explanation: "(A) 고층 버스는 출입문에 높은 계단이 있어 노약자, 어린이, 임산부, 휠체어 이용자 등 이동에 어려움을 겪는 사람들이 이용하기 어렵습니다. 반면,<b> (B) 저상 버스는 바닥이 낮고 출입구에 계단이 없으며, 필요시 경사판을 내려 휠체어나 유모차가 쉽게 오르내릴 수 있습니다.</b> 이는 신체적 조건에 상관없이 누구나 버스를 편리하게 이용할 수 있는 유니버설 디자인의 좋은 예시입니다."
+                explanation: "(A) 일반버스는 출입문에 높은 계단이 있어 노약자, 어린이, 임산부, 휠체어 이용자 등 이동에 어려움을 겪는 사람들이 이용하기 어렵습니다😥 <br><br>반면,<b> (B) 저상 버스는 바닥이 낮고 출입구에 계단이 없으며, 필요시 경사판을 내려 휠체어나 유모차가 쉽게 오르내릴 수 있습니다😍</b> 이는 신체적 조건에 상관없이 누구나 버스를 편리하게 이용할 수 있는 유니버설 디자인의 좋은 예시입니다."
             },
             {
                 question: "문제 2번: 어떤 길이 안전할까요?",
@@ -272,7 +275,7 @@
                     }
                 ],
                 answer: "(A) 점자블록 양 옆에 공간이 충분한 길",
-                explanation: "시각장애인용 점자블록은 시각장애인이 안전하게 보행할 수 있도록 길을 안내하는 중요한 시설물입니다. <b>(B) 사진처럼 점자블록 위에 물건을 쌓아두거나 다른 시설물을 설치하는 것은 시각장애인의 안전을 심각하게 위협하는 행위입니다. </b>(A) 사진처럼 점자블록을 포함한 보행로에 장애물이 없고 충분한 공간이 확보되어야 시각장애인은 물론 모든 사람이 안전하고 쾌적하게 보행할 수 있습니다. 이는 모두의 안전과 접근성을 보장하는 유니버설 디자인의 기본 원칙을 충족합니다."
+                explanation: "시각장애인용 점자블록은 시각장애인이 안전하게 보행할 수 있도록 길을 안내하는 중요한 시설물입니다. <b>(B) 사진처럼 점자블록 위에 물건을 쌓아두거나 다른 시설물을 설치하는 것은 시각장애인의 안전을 심각하게 위협하는 행위입니다😟 </b><br><br>(A) 사진처럼 점자블록을 포함한 보행로에 장애물이 없고 충분한 공간이 확보되어야 시각장애인은 물론 모든 사람이 안전하고 쾌적하게 보행할 수 있습니다😍 <br><br>그런데 여기, 어디서 본 듯하지 않으세요?<br><br>위 사진은 연신내 연서시장의 모습입니다. 장벽없는마을만들기의 주민촉진단이 (B)의 모습을 보고 (A)로 수정해야 한다고 은평구청에 요청했고, 빠르게 수정되었어요!"
             },
             {
                 question: "문제 3번: 어떤 카페에 가시겠어요?",
@@ -289,7 +292,7 @@
                     }
                 ],
                 answer: "(B) 경사로가 설치된 카페",
-                explanation: "사진처럼 카페 입구에 턱이 있으면 휠체어, 유아차 같이 바퀴달린 이동수단를 이용하는 사람들이 큰 불편을 겪습니다. 발을 헛디디기 쉬운 어린이, 어르신에게도 위험할 수 있습니다. <b> (B) 사진처럼 경사로를 설치하거나 입구의 턱을 완전히 낮추면 휠체어 사용자뿐만 아니라 모든 보행자가 안전하고 편리하게 카페를 이용할 수 있습니다.</b> 이는 물리적 장벽을 제거하여 모두의 원활한 이동을 돕는 유니버설 디자인이 잘 적용된 모습입니다."
+                explanation: "사진처럼 카페 입구에 턱이 있으면 휠체어, 유아차 같이 바퀴달린 이동수단를 이용하는 사람들이 큰 불편을 겪습니다. 발을 헛디디기 쉬운 어린이, 어르신에게도 위험할 수 있습니다😯 <b> <br><br>(B) 사진처럼 경사로를 설치하거나 입구의 턱을 완전히 낮추면 휠체어 사용자뿐만 아니라 모든 보행자가 안전하고 편리하게 카페를 이용할 수 있습니다😍</b> 이는 물리적 장벽을 제거하여 모두의 원활한 이동을 돕는 유니버설 디자인이 잘 적용된 모습입니다.<br><br>사진 속 경사로가 설치된 카페는 은평구의 <b>'장벽없는마을상점'</b>입니다😉<br><br>장벽없는마을만들기에서는 마을 상점에 경사로, 자동문과 같은 편의시설 설치를 지원합니다. 이렇게 유니버설디자인이 조금 더 확보된 곳을 '장벽없는마을상점' 이라고 해요. 은평구 곳곳에 77개의 장벽없는마을상점이 있어요!"
             }
         ];
 
@@ -322,6 +325,7 @@
         const thankYouContainerEl = document.getElementById('thank-you-container');
         const submitBtn = document.getElementById('submit-btn');
         const restartBtn = document.getElementById('restart-btn');
+        const visitBlogBtn = document.getElementById('visit-blog-btn');
         
         // --- 함수 정의 ---
         
@@ -331,7 +335,7 @@
             
             headerEl.querySelector('h1').innerText = '🧐 유니버설 디자인 챌린지!';
             scoreEl.style.display = 'block';
-            scoreEl.innerText = '점수: 0';
+            scoreEl.innerText = '점수: 0/3';
             currentQuestionIndex = 0;
             score = 0;
             userAnswers = [];
@@ -368,7 +372,7 @@
 
             if (currentQuiz.options[selectedIndex].isCorrect) {
                 score++;
-                scoreEl.innerText = `점수: ${score}`;
+                scoreEl.innerText = `점수: ${score}/3`;
                 document.getElementById(selectedIndex === 0 ? 'option-a' : 'option-b').classList.add('correct');
                 resultTitleEl.innerText = '정답입니다! ✅';
                 resultTitleEl.style.color = '#34a853';
@@ -394,7 +398,7 @@
         function showEntryForm() {
             quizAreaEl.style.display = 'none';
             formContainerEl.style.display = 'block';
-            headerEl.querySelector('h1').innerText = '챌린지 완료!';
+            headerEl.querySelector('h1').innerText = '유니버설 디자인 챌린지 완료!';
             scoreEl.innerText = `총 ${quizData.length}문제 중 ${score}문제를 맞혔습니다!`;
         }
 
@@ -440,11 +444,8 @@
         }
 
         function restartGame() {
-            thankYouContainerEl.style.display = 'none';
-            startPageEl.style.display = 'flex'; // 시작 페이지는 flex로 정렬되므로 'flex'로 변경
-            scoreEl.style.display = 'block';
-            headerEl.querySelector('h1').innerText = '🧐 유니버설 디자인 챌린지!';
-            scoreEl.innerText = '점수: 0';
+            // 페이지 전체를 새로고침하여 상태/입력값/점수 전부 초기화
+  window.location.reload();
         }
 
         // --- 이벤트 리스너 ---
@@ -455,6 +456,11 @@
         });
         submitBtn.addEventListener('click', submitData);
         restartBtn.addEventListener('click', restartGame);
+
+        // 블로그 이동 관련
+        visitBlogBtn.addEventListener('click', () => {
+            window.open('https://blog.naver.com/epudcommunity20', '_blank'); 
+        });
 
     </script>
 </body>
